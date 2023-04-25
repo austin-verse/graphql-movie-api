@@ -1,5 +1,7 @@
 import { ApolloServer, gql } from "apollo-server";
-const tweets = [
+
+// 예시 배열
+let tweets = [
 	{
 		id: "1",
 		text: "first one!",
@@ -40,6 +42,30 @@ const resolvers = {
 		// 1번째 인자는 root, 2번째 인자는 arguments
 		tweet(root, { id }) {
 			return tweets.find((tweet) => tweet.id === id);
+		},
+	},
+	Mutation: {
+		postTweet(root, { text, userId }) {
+			// arguments에서 값을 가져온 후 새로운 트윗을 만듦
+			const newTweet = {
+				id: tweets.length + 1,
+				text,
+			};
+			// 예시 배열에 newTweet을 추가함
+			tweets.push(newTweet);
+			// 새로 추가된 트윗을 return
+			return newTweet;
+		},
+		deleteTweet(root, { id }) {
+			// argument에 들어온 id값을 통해 기존 예시 배열에 있는 tweets 중 id값이 일치하는 tweet 찾기
+			const tweet = tweets.find((tweet) => tweet.id === id);
+			// id값이 일치하는 트윗이 존재하지 않을 시 false 반환
+			if (!tweet) {
+				return false;
+			}
+			// id값이 일치하는 트윗 존재 시 해당 트윗 없애고 true 반환
+			tweets = tweets.filter((tweet) => tweet.id !== id);
+			return true;
 		},
 	},
 };
