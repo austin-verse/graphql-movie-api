@@ -11,12 +11,26 @@ let tweets = [
 		text: "second one!",
 	},
 ];
+
+let users = [
+	{
+		id: "1",
+		firstName: "Austin",
+		lastName: "Hwang",
+	},
+	{
+		id: "2",
+		firstName: "Elon",
+		lastName: "Musk",
+	},
+];
+
 const typeDefs = gql`
 	type User {
 		id: ID!
-		username: String!
 		firstName: String!
 		lastName: String!
+		fullName: String!
 	}
 	type Tweet {
 		id: ID!
@@ -24,6 +38,7 @@ const typeDefs = gql`
 		author: User
 	}
 	type Query {
+		allUsers: [User!]!
 		allTweets: [Tweet!]!
 		tweet(id: ID!): Tweet
 		ping: String!
@@ -42,6 +57,18 @@ const resolvers = {
 		// 1번째 인자는 root, 2번째 인자는 arguments
 		tweet(root, { id }) {
 			return tweets.find((tweet) => tweet.id === id);
+		},
+		allUsers() {
+			console.log("all users called");
+			return users;
+		},
+	},
+	// data엔 fullName이 없었지만 fullName이라는 resolver가 발견되어서 호출되고 resolver의 결과값을 받음
+	User: {
+		// The return value of the resolver for this field's parent (i.e., the previous resolver in the resolver chain).
+		fullName({ firstName, lastName }) {
+			console.log("full name called");
+			return `${firstName} ${lastName}`;
 		},
 	},
 	Mutation: {
