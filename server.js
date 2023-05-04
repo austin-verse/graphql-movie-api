@@ -5,10 +5,12 @@ let tweets = [
 	{
 		id: "1",
 		text: "first one!",
+		userId: "2",
 	},
 	{
 		id: "2",
 		text: "second one!",
+		userId: "1",
 	},
 ];
 
@@ -35,7 +37,7 @@ const typeDefs = gql`
 	type Tweet {
 		id: ID!
 		text: String!
-		author: User
+		author: User!
 	}
 	type Query {
 		allUsers: [User!]!
@@ -69,6 +71,12 @@ const resolvers = {
 		fullName({ firstName, lastName }) {
 			console.log("full name called");
 			return `${firstName} ${lastName}`;
+		},
+	},
+	Tweet: {
+		author({ userId }) {
+			let author = users.find((user) => user.id === userId);
+			return author;
 		},
 	},
 	Mutation: {
