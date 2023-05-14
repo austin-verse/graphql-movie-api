@@ -1,6 +1,6 @@
 # GraphQL study - with Nomadcoder
 
-## GraphQL을 통해 영화 API 제작
+## GraphQL을 통해 SNS API 제작
 
 ## Credit
 
